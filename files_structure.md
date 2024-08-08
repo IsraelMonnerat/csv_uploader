@@ -1,0 +1,40 @@
+```
+└── 📁csv_uploader
+    └── 📁backend
+        └── 📁src
+            └── 📁infra
+                └── 📁cv_uploader_data_base
+                    └── __init__.py
+                    └── csv_uploader_repository.py
+                    └── querys.py
+                └── __init__.py
+                └── db_connection_handler.py
+            └── 📁models
+                └── 📁payloads
+                    └── __init__.py
+                    └── csv_uploader.py
+                └── 📁responses
+                    └── __init__.py
+                    └── csv_uploader.py
+            └── 📁routers
+                └── __init__.py
+                └── csv_uploader.py
+            └── 📁services
+                └── __init__.py
+                └── csv_uploader_service.py
+            └── __init__.py
+            └── app.py
+            └── utils.py
+        └── requirements.txt
+    └── 📁database
+        └── Dockerfile
+        └── init.sql
+    └── 📁frontend
+    └── 📁infra
+    └── .gitignore
+    └── dados_teste.csv
+    └── docker-compose.yml
+    └── Dockerfile
+    └── LICENSE
+    └── README.md
+```

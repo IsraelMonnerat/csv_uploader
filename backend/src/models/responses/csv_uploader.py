@@ -7,6 +7,7 @@ class CsvUploaderResponse(BaseModel):
 
 
 class CsvUploaderResponseAllItems(BaseModel):
+    id: int
     nome: str
     data_nascimento: str
     nacionalidade: str
