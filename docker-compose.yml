@@ -1,0 +1,30 @@
+# Use postgres/example user/password credentials
+version: '3.9'
+
+services:
+
+  db:
+    build:
+      context: ./database
+    restart: always
+    ports: 
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: csv_uploader_admin
+      POSTGRES_PASSWORD: Bruce123456789
+      POSTGRES_DB: csv_uploader
+      DB_PORT: 5432
+
+  csv_uploader:
+    build:
+      context: .
+    ports:
+      - "8150:8150"
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      POSTGRES_DB: csv_uploader
+      POSTGRES_USER: csv_uploader_admin
+      POSTGRES_PASSWORD: Bruce123456789
+      DB_PORT: 5432
