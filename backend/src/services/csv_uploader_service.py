@@ -51,10 +51,10 @@ class CsvUploaderService:
         """
         logging.info("Getting all values with pagination")
         await self.repository()
-        values = await self.repository.get_all_values_with_pagination(page_number, page_size)
+        values, total_count = await self.repository.get_all_values_with_pagination(page_number, page_size)
         if not values:
             return None
-        return await self.prepare_values(values)
+        return await self.prepare_values(values), total_count
 
     async def get_filtered_value(self, field_name: str, field_value: str, page: int) -> List[CsvUploaderResponseAllItems] | None:
         """
@@ -162,5 +162,6 @@ class CsvUploaderService:
 
         response = StreamingResponse(csv_buffer, media_type="text/csv")
         response.headers["Content-Disposition"] = "attachment; filename=relatorio.csv"
+        response.headers["Content-Type"] = "text/csv; charset=utf-8"
 
         return response

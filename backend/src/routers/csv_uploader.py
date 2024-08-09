@@ -1,5 +1,5 @@
 import logging
-from typing import List
+from typing import List, Union
 
 from fastapi import (
     APIRouter,
@@ -36,14 +36,15 @@ async def add_item(payload: AddItemPayload) -> CsvUploaderResponseAllItems:
 
 
 @router.get("/all")
-async def get_all_values(request: Request) -> List[CsvUploaderResponseAllItems] | None:
+async def get_all_values(request: Request) -> List[Union[int, CsvUploaderResponseAllItems]] | None:
     logging.info("Getting all values")
     page_size = request.headers.get("page_size", 10)
     page_number = request.headers.get("page", 1)
     service = CsvUploaderService()
-    response = await service.get_all_values_with_pagination(int(page_number), int(page_size))
+    response, total_count = await service.get_all_values_with_pagination(int(page_number), int(page_size))
     if response:
-        return response
+        result = [total_count] + list(response)
+        return result
     return None
 
 

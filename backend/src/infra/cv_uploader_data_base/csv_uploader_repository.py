@@ -99,38 +99,54 @@ class ResumeConnectionHandler(DbConnectionHandler):
                 data_nascimento = format_date(data_nascimento)
                 self.cursor.execute(insert_query, (nome, data_nascimento, genero, nacionalidade, data_criacao, data_atualizacao))
                 self.connection.commit()
-            await self.close_connection()
         except Exception as error:
             raise HTTPException(status_code=500, detail=f"Failed to save CSV file. Error: {error}") from error
         return None
 
-    async def get_all_values_with_pagination(self, page_number: int, page_size: int) -> List[Tuple]:
+    async def get_all_values_with_pagination(self, page_number: int, page_size: int) -> List[Tuple] | int:
         """
         Asynchronously retrieves all values from the 'users_data' table in the database with pagination.
+        Also retrieves the total number of items in the table.
 
         Args:
             page_number (int): The page number to retrieve values from.
+            page_size (int): The number of items per page.
 
         Returns:
-            List[Tuple]: A list of tuples representing the rows of the 'users_data' table. Each tuple contains the values of a row.
+            dict: A dictionary containing:
+                - 'total_count': The total number of items in the table.
+                - 'items': A list of tuples representing the rows of the 'users_data' table for the requested page.
 
         Raises:
             HTTPException: If there is an error while retrieving the values.
         """
         offset = (page_number - 1) * page_size
+        
         select_query = """
             SELECT * FROM users_data
             OFFSET %s
             LIMIT %s
         """
+        
+        count_query = """
+            SELECT COUNT(*) FROM users_data
+        """
+        
         try:
+            # Retrieve the total number of items
+            self.cursor.execute(count_query)
+            total_count = self.cursor.fetchone()[0]
+            
+            # Retrieve the paginated data
             self.cursor.execute(select_query, (offset, page_size))
-            result = self.cursor.fetchall()
+            items = self.cursor.fetchall()
+            
         except Exception as error:
             logging.error("Failed to get all values. Error: %s", error)
             raise HTTPException(status_code=500, detail=f"Failed to get all values. Error: {error}") from error
-        await self.close_connection()
-        return result
+
+        return items, total_count
+
     
 
     async def get_all_values(self) -> List[Tuple]:
@@ -152,7 +168,6 @@ class ResumeConnectionHandler(DbConnectionHandler):
         except Exception as error:
             logging.error("Failed to get all values. Error: %s", error)
             raise HTTPException(status_code=500, detail=f"Failed to get all values. Error: {error}") from error
-        await self.close_connection()
         return result
     
   
@@ -169,12 +184,9 @@ class ResumeConnectionHandler(DbConnectionHandler):
         Returns:
             List[Tuple]: A list of tuples representing the filtered rows from the 'users_data' table, paginated.
         """
-        offset = (page - 1) * 5
         select_query = f"""
             SELECT * FROM users_data
             WHERE {field_name} = '{field_value}'
-            OFFSET {offset}
-            LIMIT 5
         """
         try: 
             self.cursor.execute(select_query)
@@ -182,7 +194,6 @@ class ResumeConnectionHandler(DbConnectionHandler):
         except Exception as error:
             logging.error("Failed to get filtered value. Error: %s", error)
             raise HTTPException(status_code=500, detail=f"Failed to get filtered value. Error: {error}") from error
-        await self.close_connection()
         return result
     
 
@@ -209,7 +220,6 @@ class ResumeConnectionHandler(DbConnectionHandler):
             logging.error("Failed to add value to DB. Error: %s", error)
             raise HTTPException(status_code=500, detail=f"Failed to add value to DB. Error: {error}") from error
         logging.info("Value added to DB")
-        await self.close_connection()
         return await self.get_filtered_value("id", inserted_id)
     
 
@@ -249,7 +259,6 @@ class ResumeConnectionHandler(DbConnectionHandler):
             logging.error("Failed to update value in DB. Error: %s", error)
             raise HTTPException(status_code=500, detail=f"Failed to update value in DB. Error: {error}") from error
         logging.info("Value updated in DB")
-        await self.close_connection()
         return await self.get_filtered_value("id", item_id)
 
 
@@ -272,4 +281,3 @@ class ResumeConnectionHandler(DbConnectionHandler):
             logging.error("Failed to delete value from DB. Error: %s", error)
             raise HTTPException(status_code=500, detail=f"Failed to delete value from DB. Error: {error}") from error
         logging.info("Value deleted from DB")
-        await self.close_connection()

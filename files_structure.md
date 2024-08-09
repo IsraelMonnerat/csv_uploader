@@ -30,11 +30,47 @@
         └── Dockerfile
         └── init.sql
     └── 📁frontend
+        └── 📁public
+            └── vite.svg
+        └── 📁src
+            └── 📁components
+                └── 📁header
+                    └── index.tsx
+                └── 📁tableCSV
+                    └── TableCSV.tsx
+            └── 📁pages
+                └── 📁csvReader
+                    └── 📁consultar
+                        └── index.tsx
+                    └── 📁enviar
+                        └── index.tsx
+                    └── CSVReader.tsx
+            └── 📁services
+                └── 📁csv
+                    └── index.tsx
+            └── App.css
+            └── App.tsx
+            └── index.css
+            └── main.tsx
+            └── store.ts
+            └── vite-env.d.ts
+        └── .gitignore
+        └── Dockerfile
+        └── eslint.config.js
+        └── index.html
+        └── package-lock.json
+        └── package.json
+        └── README.md
+        └── tsconfig.app.json
+        └── tsconfig.json
+        └── tsconfig.node.json
+        └── vite.config.ts
     └── 📁infra
     └── .gitignore
     └── dados_teste.csv
     └── docker-compose.yml
     └── Dockerfile
+    └── files_structure.md
     └── LICENSE
     └── README.md
 ```

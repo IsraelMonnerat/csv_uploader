@@ -1,0 +1,56 @@
+.header {
+  background-color: #f4f4f4;
+  padding: 20px;
+  border-bottom: 2px solid #ddd;
+  height: 100%;
+  display: flex;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.title {
+  font-size: 2.5rem;
+  color: #333;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 1.3rem; /* Tamanho da fonte do subtítulo */
+  color: #26a69a; /* Cor do texto do subtítulo */
+  margin: 0; /* Remove a margem padrão do parágrafo */
+  font-weight: 300; /* Peso da fonte do subtítulo */
+  line-height: 1.6; /* Altura da linha do subtítulo */
+  text-align: center; /* Centraliza o texto */
+  padding: 20px;
+  font-weight: bold;
+}
+
+.main-content {
+  margin-top: 7px; /* Adicione esta linha para espaçamento do header fixo */
+  padding: 20px;
+  height: 100%;
+}
+
+.text_Form:focus {
+  border-color: #26a69a;
+}
+
+.label_form {
+  font-weight: bold;
+  color: #424242
+}
+
+Header {
+  margin-bottom: 100px;
+}
+
+.paper-style {
+  width: 60%;
+  margin: 0 auto;
+  display: block;
+}
+
